@@ -1,0 +1,25 @@
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"]),
+)
+
+cmake(
+    name = "assimp",
+    generate_args = [
+        "-GNinja",
+    ],
+    cache_entries = {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "ASSIMP_BUILD_TESTS": "OFF",
+        "ASSIMP_WARNINGS_AS_ERRORS": "OFF",
+    },
+    copts = [ "-Wno-error" ],
+    lib_source = ":all_srcs",
+    out_shared_libs = [
+        "libassimp.so.5"
+    ],
+)

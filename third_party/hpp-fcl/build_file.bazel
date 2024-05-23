@@ -1,0 +1,30 @@
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"]),
+)
+
+cmake(
+    name = "hpp-fcl",
+    generate_args = [
+        "-GNinja",
+    ],
+    cache_entries = {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "BUILD_PYTHON_INTERFACE": "OFF",
+        "BUILD_TESTING": "OFF",
+        "ASSIMP_ROOT_DIR": "$$EXT_BUILD_DEPS$$/assimp"
+    },
+    copts = ["-Wno-error"],
+    lib_source = ":all_srcs",
+    out_shared_libs = [
+        "libhpp-fcl.so",
+    ],
+    deps = [
+        "@assimp",
+        "@octomap"
+    ]
+)
